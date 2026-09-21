@@ -102,7 +102,39 @@ class double_linked_list:
                 
                 p = p.next
 
-    #
+    # empty
+    def empty(self):
+        if self.size == 0:
+            return True
+        else:
+            return False
+
+    def __len__(self):
+        return self.size
+
+    # search：takes the value and returns an index
+    def search(self,d):
+        if self.head is None:
+            return -1
+        else:
+            p = self.head
+            index = 0
+            while p is not None:
+                if p.data == d:
+                    return index
+                # if not match we continue check the next one, until its matching and returning the index
+                p = p.next
+                index += 1
+
+            return -1
+
+
+
+
+    
+
+
+    
 
 
 
