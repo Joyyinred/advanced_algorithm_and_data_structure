@@ -75,8 +75,40 @@ class double_linked_list:
         self.size += 1
 
     # delete
-    def delete(self,index,d):
-        
+    def delete(self,d):
+        if self.head is None:
+            return
+        else:
+            p = self.head
+            while p is not None:
+                if p.data == d:
+                    before = p.prev
+                    after = p.next
+
+                    if before is None:  # if the value is head
+                        self.head = p.next
+                    else:
+                        before.next = after
+
+                    if after is None:   # if the value is tail
+                        self.tail = self.tail.prev
+                    else:
+                        after.prev = before
+
+
+                    self.size -= 1
+
+                    return
+                
+                p = p.next
+
+    #
+
+
+
+
+
+
                      
 
 
