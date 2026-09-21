@@ -47,7 +47,7 @@ class LinkedList ():
                 if p.nxt.val == d:
                     p.nxt = p.nxt.nxt  # skip the node we wanna delete
                     return  # after delete the value, end the function in case it crash,only delete the first node that has the value
-                
+            
                 p = p.nxt
                      
             
@@ -61,3 +61,49 @@ class LLNode:
         self.nxt = None
     def __repr__(self):
         return (str(self.val) + " nxt- " + str(self.nxt))
+
+
+
+
+# check the implementation
+def build(values):
+    ll = LinkedList()
+    for v in values:
+        ll.append(v)
+    return ll
+
+# ---------- empty ----------
+ll = LinkedList()
+print(ll.empty())          # True
+ll.append(1)
+print(ll.empty())          # False
+
+# ---------- __len__ ----------
+print(len(LinkedList()))   # 0
+print(len(build([4])))     # 1
+print(len(build([4, 8, 16])))  # 3
+
+# ---------- delete ----------
+ll = build([4, 8, 16, 32])
+ll.delete(16)              # middle
+print(ll.lst)              # 4 nxt- 8 nxt- 32 nxt- None
+
+ll = build([4, 8, 16, 32])
+ll.delete(4)               # first
+print(ll.lst)              # 8 nxt- 16 nxt- 32 nxt- None
+
+ll = build([4, 8, 16, 32])
+ll.delete(32)              # last
+print(ll.lst)              # 4 nxt- 8 nxt- 16 nxt- None
+
+ll = build([4, 8, 16, 32])
+ll.delete(99)              # not in list
+print(ll.lst)              # 4 nxt- 8 nxt- 16 nxt- 32 nxt- None
+
+ll = LinkedList()
+ll.delete(1)               # empty list
+print(ll.lst)              # None
+
+ll = build([4])
+ll.delete(4)               # only node
+print(ll.lst, ll.empty(), len(ll))   # None True 0
