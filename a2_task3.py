@@ -141,6 +141,23 @@ class double_linked_list:
 
             return p.data
 
+    # print
+    def print_forward(self):
+        p = self.head
+        while p is not None:
+            print(p.data,end=" ")
+            p = p.next
+        print()
+
+    def print_backward(self):
+        p = self.tail
+        while p is not None:
+            print(p.data,end=" ")
+            p = p.prev
+        print()
+    
+
+
           
 
 
