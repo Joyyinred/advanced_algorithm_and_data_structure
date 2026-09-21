@@ -128,6 +128,21 @@ class double_linked_list:
 
             return -1
 
+    # return: it takes an index and returns a value.
+    def Return(self,index):
+        if index < 0 or index >= self.size:
+            raise IndexError("index out of range")
+
+        else:
+            p = self.head
+            
+            for _ in range(index):
+                p = p.next
+
+            return p.data
+
+          
+
 
 
 
