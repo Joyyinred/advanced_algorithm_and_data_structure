@@ -55,5 +55,10 @@ class double_linked_list:
         self.tail = new_tail
 
 
+# The runtime is O(n). 
+# Relinking the nodes takes constant time, since only four pointers and the head/tail references change. 
+# Finding the new head requires walking n − r steps from the head, 
+# which is at most n − 1 steps in the worst case (r = 1).
+
 
 
