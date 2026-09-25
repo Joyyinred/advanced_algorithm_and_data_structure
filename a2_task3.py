@@ -1,6 +1,35 @@
-# Provide a python implementation of double linked lists. 
-# operations: append,insert, empty,len,delete,Search
-# append → prepend → insert (which uses both) → delete
+
+
+# Provide a python implementation of double linked lists.
+#
+# The List ADT
+#
+# Domain: a finite, ordered sequence L = < a_0, ..., a_(N-1) >
+#         Positions are 0-based. An empty list has length 0.
+#
+# Syntax:
+#   __init__()        ->  LIST          new empty list
+#   empty()           ->  BOOLEAN
+#   count()           ->  INT
+#   append(x)         ->  None          add x at the end
+#   add_value(p, x)   ->  None          insert x at position p   (slide 14)
+#   remove(p)         ->  None          remove element at p      (slide 15)
+#   search(x)         ->  INT           position of x, -1 if not found (slide 16)
+#   Return(p)         ->  value at p                             (slide 16)
+#   delete(x)         ->  None          remove the first element with value x;
+#                                       the list is unchanged if x is not in the list
+#
+# Semantics:
+#   empty(new list)                 = True
+#   count(new list)                 = 0
+#   add_value(p, x) with 0 <= p <= N inserts x, so Return(p) = x
+#   remove(p) with 0 <= p < N removes a_p
+#   search(x) = p if a_p = x, otherwise -1
+#   "otherwise undefined" is implemented as raise IndexError
+#
+# Implementation notes:
+#   Double linked list with references to both ends (head, tail) and a size
+#   counter, so append and count run in O(1).
 
 
 class Node:
@@ -29,8 +58,8 @@ class double_linked_list:
             self.tail = new
         self.size += 1
 
-    # insert
-    def insert(self,index,d):
+    # insert(add_value)
+    def add_value(self,index,d):
 
         # check index validation
         if index < 0 or index > self.size:
@@ -102,6 +131,32 @@ class double_linked_list:
                 
                 p = p.next
 
+    # remove: takes an index and removes the node at that position
+    def remove(self, index):
+        # check index validation
+        if index < 0 or index >= self.size:
+            raise IndexError("index out of range")
+
+        # walk to the node at position index
+        p = self.head
+        for _ in range(index):
+            p = p.next
+
+        before = p.prev
+        after = p.next
+
+        if before is None:      # the node is the head
+            self.head = after
+        else:
+            before.next = after
+
+        if after is None:       # the node is the tail
+            self.tail = before
+        else:
+            after.prev = before
+
+        self.size -= 1
+
     # empty
     def empty(self):
         if self.size == 0:
@@ -109,7 +164,7 @@ class double_linked_list:
         else:
             return False
 
-    def __len__(self):
+    def count(self):
         return self.size
 
     # search：takes the value and returns an index
