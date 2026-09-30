@@ -90,28 +90,46 @@ class BTree:  # actually is the node, since the whole tree is just root node so 
         return True
 
     def splice(self,u):
+        # find u's only child s, can be none if its just a leaf
         if u.left is not None:
-            s = u.left
+            s = u.left 
         else:
             s = u.right
-        if u == self:
-            self = s
-            p = None
+
+        # if u is the root node
+        if u.parent is None:
+            if s is None:
+                return False
+            u.key = s.key
+            u.left = s.left
+            u.right = s.right
+
+            if u.left is not None:
+                u.left.parent = u
+            if u.right is not None:
+                u.right.parent = u
+            return True
+            
+        # u is not root, let the parent has s as child
+        p = u.parent
+        if p.left == u:
+            p.left = s
         else:
-            p = u.parent
-            if p.left == u:
-                p.left = s
-            else:
-                p.right = s
+            p.right = s
         if s is not None:
             s.parent = p
 
+        return True
 
-
-
-    
-
-
+    def remove_node(self,u):
+        if u.left is None or u.right is None:
+            return self.splice(u)
+        else:
+            w = u.right
+            while w.left is not None:
+                w = w.left
+            u.key = w.key
+            return self.splice(w)
 
 
 
