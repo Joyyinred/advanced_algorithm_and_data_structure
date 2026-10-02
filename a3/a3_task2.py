@@ -18,7 +18,7 @@ class BTree:  # actually is the node, since the whole tree is just root node so 
         while u is not None:
             u = u.parent
             d += 1
-        return 
+        return d
 
     def size(self):
         left_size = 0
@@ -59,7 +59,7 @@ class BTree:  # actually is the node, since the whole tree is just root node so 
         p = self.find_last(x)
         u = BTree()
         u.key = x
-        return self.add_child(p,x)
+        return self.add_child(p,u)
         
 
     def find_last(self,x):
@@ -131,6 +131,13 @@ class BTree:  # actually is the node, since the whole tree is just root node so 
             u.key = w.key
             return self.splice(w)
 
+    # delete the value
+    def remove(self, x):
+        u = self.find_last(x)
+        if u.key != x:          # didnt find x
+            return False
+        return self.remove_node(u)
+
 
 
     def preorder_traverse(self):
@@ -138,7 +145,7 @@ class BTree:  # actually is the node, since the whole tree is just root node so 
         if self.left is not None:
             self.left.preorder_traverse()
         if self.right is not None:
-            self.left.preorder_traverse()
+            self.right.preorder_traverse()
 
 
     def inorder_traverse(self):
