@@ -67,6 +67,22 @@ class LinkedList ():
 
 
 # stack class
+
+# Stack ADT
+# Syntax:
+#   __init__()   -> STACK          new empty stack
+#   push(v)      -> None           put v on top
+#   pop()        -> None           remove the top element
+#   top()        -> value | None   top element, None if empty
+#   empty()      -> BOOLEAN
+# Semantics: (s is stack, v is value)
+#   empty(new stack)    = True
+#   empty(push(s, v))   = False
+#   top(push(s, v))     = v
+#   pop(push(s, v))     = s
+#   top(new stack)      = None  (the ADT's "Error")
+#   pop(new stack)      = no change
+
 class Stack:
     def __init__(self):
         self.items = LinkedList()
@@ -109,11 +125,24 @@ class Stack:
 
 # queue class
 
+# queue ADT
+# Syntax:
+#   __init__()   -> QUEUE          new empty queue
+#   enqueue(v)   -> None           add v at the back
+#   dequeue()    -> value | None   remove and return the front element,
+#                                  None if the queue is empty
+#   empty()      -> BOOLEAN
+#   count()      -> INT
+# Semantics (FIFO):
+#   empty(new queue)  = True
+#   count(new queue)  = 0
+#   elements leave the queue in the same order they were enqueued
+
 class queue:
     def __init__(self):
         self.items = LinkedList()
         self.tail = None   # tail pointer
-        self.size = 0      # size counter
+        self.size = 0      # size counter since we cant use __len__, its runtime is O(n)
 
     # add the value to the back of the queue
     def enqueue(self,v):

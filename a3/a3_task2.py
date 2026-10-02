@@ -4,8 +4,56 @@
 
 from collections import deque
 
+# Binary search tree ADT
+# A binary tree where every node has at most two children. In a binary
+# search tree the keys are ordered: left subtree < key < right subtree.
+# add, find and remove keep this order. The traversals work on any binary tree.
+#
+# Design (two classes):
+#   BTree             the node class (key, parent, left, right);
+#                     does the recursive work
+#   BinarySearchTree  the tree; holds the root (None = empty tree), so an
+#                     empty tree and removing the last node are supported
+#
+# Syntax (BinarySearchTree, the operations a user calls):
+#   BinarySearchTree()      -> TREE      new empty tree
+#   empty()                 -> BOOLEAN
+#   size()                  -> INT       number of nodes, 0 if empty
+#   height()                -> INT       longest path to a leaf, leaf = 0, empty = -1
+#   find(x)                 -> key | None
+#   add(x)                  -> BOOLEAN   False if x already exists
+#   remove(x)               -> BOOLEAN   False if x is not in the tree
+#   preorder_traverse()     -> None      prints keys: node, left, right
+#   inorder_traverse()      -> None      prints keys: left, node, right
+#   postorder_traverse()    -> None      prints keys: left, right, node
+#   levelorder_traverse()   -> None      prints keys level by level (uses a queue)
+#
+# Node operations (BTree):
+#   depth()                 -> INT       number of edges to the root
+#   remove_node(u)          -> BOOLEAN   remove node u from the tree
+#   helpers used by add/remove: find_last, add_child, splice
 
-class BTree:  # actually is the node, since the whole tree is just root node so we only need this one class
+# Semantics:
+#   empty(new tree)   = True
+#   size(new tree)    = 0
+#   height(new tree)  = -1
+#   find(x)           = x if x is in the tree, otherwise None
+#
+#   add(x), x not in the tree:  returns True,  find(x) = x,  size increases by 1
+#   add(x), x already in tree:  returns False, tree unchanged
+#   remove(x), x in the tree:   returns True,  find(x) = None, size decreases by 1
+#   remove(x), x not in tree:   returns False, tree unchanged
+#
+#   size(u)   = 1 + size(u.left) + size(u.right),         empty subtree = 0
+#   height(u) = 1 + max(height(u.left), height(u.right)), empty subtree = -1
+#   depth(root) = 0,  depth(u) = depth(u.parent) + 1
+#
+#   After every add and remove: left subtree < key < right subtree,
+#   so inorder_traverse prints the keys in sorted order.
+#   Every traversal prints each key exactly once.
+
+
+class BTree:  # the node class; the whole tree is the BinarySearchTree below
     def __init__(self):
         self.key = None
         self.parent = None
@@ -175,14 +223,76 @@ class BTree:  # actually is the node, since the whole tree is just root node so 
             if u.right is not None:
                 q.append(u.right)
 
+class BinarySearchTree:
+    
+    # tree object only holds the root (none = empty tree)
+    # all the recursive work is done by the BTree nodes
+    
+    def __init__(self):
+        self.root = None
+
+    def empty(self):
+        return self.root is None
+
+    def size(self):
+        if self.root is None:
+            return 0
+        return self.root.size()
+
+    def height(self):
+        if self.root is None:
+            return -1                  
+        return self.root.height()
+
+    def find(self, x):
+        if self.root is None:
+            return None
+        return self.root.find(x)
+
+    def add(self, x):
+        if self.root is None:          # empty tree: the new node becomes the root
+            self.root = BTree()
+            self.root.key = x
+            return True
+        return self.root.add(x)
+
+    def remove(self, x):
+        if self.root is None:          # empty tree: nothing to remove
+            return False
+        # the root is the only node and has key x: the tree becomes empty
+        if self.root.left is None and self.root.right is None and self.root.key == x:
+            self.root = None
+            return True
+        return self.root.remove(x)
+
+    def preorder_traverse(self):
+        if self.root is not None:
+            self.root.preorder_traverse()
+        print()
+
+    def inorder_traverse(self):
+        if self.root is not None:
+            self.root.inorder_traverse()
+        print()
+
+    def postorder_traverse(self):
+        if self.root is not None:
+            self.root.postorder_traverse()
+        print()
+
+    def levelorder_traverse(self):
+        if self.root is not None:
+            self.root.levelorder_traverse()
+        print()
+
 
 
 # Runtime:
-# preorder, inorder, postorder: O(n). Each node causes exactly one call,
-#   plus n+1 calls on empty children (None), so 2n+1 calls in total,
-#   each doing O(1) work.
+# preorder, inorder, postorder: O(n). 
+# Each node is visited by exactly one call (children are checked for None before calling, so there are no
+# calls on empty subtrees), and each call does O(1) work.
 # levelorder: O(n). Each node is enqueued once and dequeued once,
-#   and deque.append / deque.popleft are both O(1).
+# and deque.append / deque.popleft are both O(1).
 #
 # Additional data structure for levelorder: a queue (FIFO).
 # Children are added at the back, so all nodes of one level are
