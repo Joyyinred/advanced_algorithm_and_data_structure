@@ -122,7 +122,6 @@ class LLNode:
 
 
 # test it on a random list
-import random
 
 L = LinkedList()
 for _ in range(10):
@@ -150,4 +149,5 @@ for n in [1000, 2000, 4000, 8000, 16000, 32000]:
     start = time.perf_counter()
     merge_sort(L)                     # only this is timed
     t = time.perf_counter() - start
-    print(n, round(t, 4), round(t / (n * math.log2(n)) * 1e9, 1))
+    print(n, round(t, 4), round(t / (n * math.log2(n)) * 1e9, 1))   # use time/nlogn to get the constant number(c from c*nlogn), 
+                                                                    # if c is very similar to each other, then correct, 1e9 to make the c more readable otherwise its too small
