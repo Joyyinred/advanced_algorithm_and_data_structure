@@ -126,9 +126,9 @@ class LLNode:
 L = LinkedList()
 for _ in range(10):
     L.append(random.randint(1, 100))
-print(L.lst)                  # before
+print(L.lst)          # before
 L = merge_sort(L)
-print(L.lst)                  # after: should be sorted
+print(L.lst)       # after: should be sorted
 
 # measure the run time
 def build_random_list(n):
@@ -143,11 +143,24 @@ def build_random_list(n):
         tail = new
     return L
 
+def to_pylist(L):
+    out, p = [], L.lst
+    while p is not None:
+        out.append(p.val)
+        p = p.nxt
+    return out
+
+for _ in range(100):
+    L = build_random_list(random.randint(0, 50))
+    expected = sorted(to_pylist(L))
+    assert to_pylist(merge_sort(L)) == expected
+print("merge sort tests passed")
+
 print("n        time (s)    time / (n log n)")
 for n in [1000, 2000, 4000, 8000, 16000, 32000]:
-    L = build_random_list(n)          # not timed
+    L = build_random_list(n)      # not timed
     start = time.perf_counter()
-    merge_sort(L)                     # only this is timed
+    merge_sort(L)        # only this is timed
     t = time.perf_counter() - start
     print(n, round(t, 4), round(t / (n * math.log2(n)) * 1e9, 1))   # use time/nlogn to get the constant number(c from c*nlogn), 
                                                                     # if c is very similar to each other, then correct, 1e9 to make the c more readable otherwise its too small

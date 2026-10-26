@@ -19,7 +19,7 @@ def BFS(G,v,u):
     while q:   # while q is not empty
         w = q.popleft()
         if w == u:
-            return steps[w]
+            return w, steps[w]
 
         i = G.index[w]   # get row of w in the matrix
         for j in range(len(G.nodes)): # check every column in row i
@@ -30,7 +30,7 @@ def BFS(G,v,u):
                     steps[x] = steps[w] + 1
                     q.append(x)
 
-    return None
+    return None, None
 
 # graph from task 2
 class MatrixGraph:
@@ -55,6 +55,8 @@ class MatrixGraph:
         self.M[self.index[u]][self.index[v]] = w
 
     def removeNode(self,u):
+        if u not in self.index:  # if node doesnt exist
+            return
         i = self.index.pop(u)  # get u's row number and remove it from dict
         self.M.pop(i) # remove the row
         for row in self.M:
@@ -66,16 +68,19 @@ class MatrixGraph:
 
 
     def removeEdge(self,u,v):
+        if u not in self.index or v not in self.index:
+            return
         self.M[self.index[u]][self.index[v]] = None
 
 
 # example to test
 def test_bfs():
     G = MatrixGraph()
+    # graph is like:
     #   A -> B -> C -> D
-    #   A -> D            (shortcut)
+    #   A -> D    (shortcut)
     #   A -> E -> F
-    #   Z                 (no edges, unreachable)
+    #   Z      (no edges, unreachable)
     G.addEdge("A", "B", 1)
     G.addEdge("B", "C", 1)
     G.addEdge("C", "D", 1)
@@ -84,13 +89,25 @@ def test_bfs():
     G.addEdge("E", "F", 1)
     G.addNode("Z")
 
-    assert BFS(G, "A", "A") == 0      # start = target
-    assert BFS(G, "A", "B") == 1
-    assert BFS(G, "A", "C") == 2
-    assert BFS(G, "A", "D") == 1      # finds the shortcut A->D, not A->B->C->D (3 edges)
-    assert BFS(G, "A", "F") == 2
-    assert BFS(G, "A", "Z") is None   # not reachable
-    assert BFS(G, "D", "A") is None   # directed graph: no path back
+    # (start, target, expected result)
+    tests = [
+        ("A", "A", ("A", 0)),    # start = target
+        ("A", "B", ("B", 1)),
+        ("A", "C", ("C", 2)),
+        ("A", "D", ("D", 1)),  # finds the shortcut A->D, not A->B->C->D (3 edges)
+        ("A", "F", ("F", 2)),
+        ("A", "Z", (None, None)),  # not reachable
+        ("D", "A", (None, None)),  # directed graph: no path back
+    ]
+
+    for start, target, expected in tests:
+        node, edges = BFS(G, start, target)
+        if node is None:
+            print(f"BFS({start} -> {target}): not reachable")
+        else:
+            print(f"BFS({start} -> {target}): found {node}, {edges} edge(s) on the shortest path")
+        assert (node, edges) == expected
+
     print("All BFS tests passed")
 
 test_bfs()

@@ -28,6 +28,8 @@ class MatrixGraph:
         self.M[self.index[u]][self.index[v]] = w
 
     def removeNode(self,u):
+        if u not in self.index:  # if node doesnt exist
+            return
         i = self.index.pop(u)  # get u's row number and remove it from dict
         self.M.pop(i) # remove the row
         for row in self.M:
@@ -39,19 +41,13 @@ class MatrixGraph:
 
 
     def removeEdge(self,u,v):
+        if u not in self.index or v not in self.index:
+            return
         self.M[self.index[u]][self.index[v]] = None
 
-# implementation with adj list(addedge, removenode)
-class AdjListGraph:
-    def __init__(self):
-        self.adj = []  # dict of list of (neighbour, weight)
 
-    def addNode(self,u):
-        self.adj.append(u)
 
-    def addEdge(self,u,v,w):
-        self.adj[u][v] = w
-
+# test
 def test_matrix_graph():
     G = MatrixGraph()
 
